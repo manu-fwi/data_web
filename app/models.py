@@ -41,3 +41,11 @@ class db_data_streams(Base):
     date_time = Column(DateTime(),index=True,nullable=True)
     header = relationship('db_data_streams_head',foreign_keys=header_id,
                            back_populates = 'stream_values')
+
+# Table holding updates (additions only) of the data streams
+# Each record points to the data stream record that has been added
+class db_updates(Base):
+    __tablename__ = "updated_streams"
+    id = Column(Integer, primary_key=True)
+    stream_id = Column(Integer,ForeignKey('data_streams.id'))
+    date_time = Column(DateTime(),index=True)
