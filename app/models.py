@@ -1,9 +1,4 @@
-from sqlalchemy import ForeignKey
-from sqlalchemy.orm import declarative_base, relationship, aliased
-from sqlalchemy import Column, Integer, String, DateTime
-from datetime import datetime
-
-Base = declarative_base()
+from app import db
 
 # table that stores each data stream characteristics:
 # name (string)
@@ -19,13 +14,13 @@ Base = declarative_base()
 # if no timezone is provided, UTC is assumed
 # all times/dates will be stored in UTC
 
-class db_data_streams_head(Base):
+class db_data_streams_head(db.Model):
     __tablename__= "data_streams_head"
-    id = Column(Integer, primary_key=True)
-    name = Column(String(200),index=True)
-    stream_format = Column(String(30))
-    fields = Column(String(200))
-    stream_values = relationship("db_data_streams", back_populates="header")
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(200),index=True)
+    stream_format = db.Column(db.String(30))
+    fields = db.Column(db.String(200))
+    stream_values = db.relationship("db_data_streams", back_populates="header")
 
 # Actual data streams
 # header_id points to the header describing the data stream
@@ -33,19 +28,19 @@ class db_data_streams_head(Base):
 # the date_time field is taken from the date field of value if it exists
 # otherwise it must be added on reception
 
-class db_data_streams(Base):
+class db_data_streams(db.Model):
     __tablename__= "data_streams"
-    id = Column(Integer, primary_key=True)
-    header_id = Column(Integer,ForeignKey('data_streams_head.id'))
-    value = Column(String(300))
-    date_time = Column(DateTime(),index=True,nullable=True)
-    header = relationship('db_data_streams_head',foreign_keys=header_id,
-                           back_populates = 'stream_values')
+    id = db.Column(db.Integer, primary_key=True)
+    header_id = db.Column(db.Integer,db.ForeignKey('data_streams_head.id'))
+    value = db.Column(db.String(300))
+    date_time = db.Column(db.DateTime(),index=True,nullable=True)
+    header = db.relationship('db_data_streams_head',foreign_keys=header_id,
+                             back_populates = 'stream_values')
 
 # Table holding updates (additions only) of the data streams
 # Each record points to the data stream record that has been added
-class db_updates(Base):
+class db_updates(db.Model):
     __tablename__ = "updated_streams"
-    id = Column(Integer, primary_key=True)
-    stream_id = Column(Integer,ForeignKey('data_streams.id'))
-    date_time = Column(DateTime(),index=True)
+    id = db.Column(db.Integer, primary_key=True)
+    stream_id = db.Column(db.Integer,db.ForeignKey('data_streams.id'))
+    data_stream = db.relationship('db_data_streams',foreign_keys=stream_id)
