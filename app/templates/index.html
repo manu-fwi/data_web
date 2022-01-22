@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block app_content %}    
+
+<div id="graph"> </div>
+<div id="status"> </div>
+    
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
+
+<script src="https://cdn.plot.ly/plotly-2.8.3.min.js"></script>
+
+<script type="text/javascript" charset="utf-8">
+  $(document).ready(function() {
+      $('#message').text("Connecting ");
+      var socket = io();
+      var data_array=[];
+      
+      socket.on('connect', function() {
+	  $('#status').text("Connected to the server");
+      });
+      socket.on('connected', function() {
+	  $('#status').text("Asking data");
+	  socket.emit('data_request',{streams:[{name:"127.0.0.1/test-csv-date",nb_data_init:10}]})
+      });
+      socket.on('init', function(msg) {
+	  data_array = msg['data']['values'];
+	  dates_array = msg['data']['dates_times']
+	  Plotly.newPlot('graph', [{y: data_array,
+				    text: msg['data']['dates_times'],
+				    mode: 'lines',
+				    line: {color: '#80CAF6'}
+				   }]);
+	  $('#status').text('init for : '+data_array);
+      });
+      socket.on('update', function(msg) {
+	  $('#status').text('update1 '+data_array);	  
+	  msg['data']['values'].forEach(function(item, index, array) {
+	      data_array.push(item);
+	  });
+	  if (data_array.length>100)
+	      data_array.splice(0,data_array.length-100);
+	  $('#status').text('update2 '+data_array);
+	  for (const element of msg['data']['dates_times']) {
+	      dates_array.push(element);
+	  }
+	  if (dates_array.length>100)
+	      dates_array.splice(0,dates_array.length-100);
+	  Plotly.update('graph', { y: [data_array], text:[dates_array]});
+      });
+  });
+</script>
+    
+{% endblock %}

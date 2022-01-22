@@ -41,7 +41,7 @@ def data_request(js_arg):
     for l in lst:
         for s in js_arg["streams"]:
             if s["name"]==l.name:
-                names_limits_lst.append((l.name,l.id,s["limit"]))
+                names_limits_lst.append((l.name,l.id,s["nb_data_init"]))
     #FIXME: add detection of streams that have not been found
     
     #Now send first batch of data corresponding to all data streams using the "init" message to the queue
