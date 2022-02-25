@@ -5,6 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask import Flask
 from app import config
 from flask_socketio import SocketIO
+from flask_bootstrap import Bootstrap 
 
 import sys
 
@@ -19,6 +20,7 @@ else:
 
 # Application object
 app = Flask(__name__)
+boot = Bootstrap(app)
 
 #load app config
 app.config.from_object(config.Config)
@@ -30,7 +32,5 @@ print("tables=",db.metadata)
 
 #start socketio
 socketio = SocketIO(app,async_mode="eventlet")
-
-#bootstrap = Bootstrap(app)
 
 from app import models,routes

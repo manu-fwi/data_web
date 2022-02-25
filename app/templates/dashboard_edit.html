@@ -6,11 +6,22 @@
 </div>
 <div>
   <div>
-   Edit Dashboard {{ dashboard_name }}</a>
-  </div>
+    Edit Dashboard {{ dashboard_name }}
 </div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
+</div>
+<form action="" method="post">
+  {{ form.hidden_tag() }}
+  <span>
+    {{ form.name.label }} {{ form.name }}
+  </span>
+  <span>
+  {{ form.graph.label }} {{ form.graph }}
+  </span>
+  <span>
+  {{ form.data_stream_name.label }} {{ form.data_stream_name }}
+  </span>
+  {{ form.submit }}
 
-<script src="https://cdn.plot.ly/plotly-2.8.3.min.js"></script>
-    
+</form>
+
 {% endblock %}
