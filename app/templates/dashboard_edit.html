@@ -7,19 +7,30 @@
 <div>
   <div>
     Edit Dashboard {{ dashboard_name }}
-</div>
+  </div>
 </div>
 <form action="" method="post">
   {{ form.hidden_tag() }}
-  <span>
-    <select class="custom-select" multiple>
-      {% for data_str in get_data_streams_head() %}
-      <option value="{{ loop.index }}">{{ data_str.name }}</option>
-      {% endfor %}
-    </select>
-  </span>
-    <button type="submit" class="btn btn-primary"><img src="{{ url_for('static',filename='bootstrap-icons-1.8.1/record-btn.svg') }}"></button>
-
+  <div class="container">
+    <div class="row">
+      <div class="col-3">
+	{{ form.name.label }} {{ form.name }}
+      </div>
+      <div class="col-2">
+	{{ form.graph.label }} {{ form.graph }}
+      </div>
+      <div class="col-6">
+	<select name="data_str_head" class="custom-select" multiple>
+	  {% for data_str in get_data_streams_head() %}
+	  <option value="{{ loop.index }}">{{ data_str.name }}</option>
+	  {% endfor %}
+	</select>
+      </div>
+      <div class="col-1">
+	<button type="submit" class="btn btn-primary"><img src="{{ url_for('static',filename='bootstrap-icons-1.8.1/save2.svg') }}"></button>
+      </div>
+    </div>
+  </div>
 </form>
 
 {% endblock %}

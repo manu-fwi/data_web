@@ -23,12 +23,10 @@ def get_dashboards():
 #get all data_streams_head db records
 def get_data_streams_head():
     return models.db_data_streams_head.query.all()
-    #FIXME should send all dashboard db records
-    data_str_head=[]
-    for i in range(10):
-        dash ="dash numero "+str(i)
-        dashboards.append(dash)
-    return dashboards
+
+#get all data_streams_head db records
+def get_graphs():
+    return models.db_graph.query.all()
 
 @app.route('/create_dashboard',methods=['GET', 'POST'])
 def create_dashboard():
@@ -50,18 +48,22 @@ def dashboard_view(dashboard_name):
     return render_template('dashboard_view.html', title='View Dashboards',
                            dashboard_name=dashboard_name)
 
-@app.route('/edit_dashboards')
-def edit_dashboards():
-    return render_template('edit_dashboards.html', title='Edit Dashboards', action="dashboard_edit",
-                           get_dashboards=get_dashboards)
+@app.route('/edit_graphs')
+def edit_graphs():
+    form=forms.GraphEditForm()
+
+    print("edit graphs")
+    return render_template('edit_graphs.html', title='Edit graphs', action="edit_graphs",
+                           get_data_streams_head=get_data_streams_head,
+                           get_graphs=get_graphs,
+                           form=form)
 
 @app.route('/dashboard_edit/<string:dashboard_name>',methods=['GET', 'POST'])
 def dashboard_edit(dashboard_name):
     form=forms.DashboardEditForm(name=dashboard_name)
 
-    if form.validate_on_submit() or request.method=='POST':
-        print(request.form)
-        print(request.get_data())
+    if form.validate_on_submit():
+        print(dashboard_name)
         return redirect('/view_dashboards')
     return render_template('dashboard_edit.html',
                            title='Edit Dashboard : '+dashboard_name,
