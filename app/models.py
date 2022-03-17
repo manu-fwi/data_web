@@ -47,13 +47,24 @@ class db_updates(db.Model):
     data_stream = db.relationship('db_data_streams',foreign_keys=stream_id)
 
 # Dashboard related models
+
+#association table to build a full dashboard
+#a full dashboard has a name and is made from graphs
+
+full_dashboards = db.Table('full_dashboards',
+    db.Column('dashboard_id', db.Integer, db.ForeignKey('dashboards.id')),
+    db.Column('graph_id', db.Integer, db.ForeignKey('graphs.id'))
+)
+
+#Dashboard
 class db_dashboard(db.Model):
     __tablename__ = "dashboards"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(200),index=True)
+    graphs = db.relationship("db_graph",secondary=full_dashboards,lazy='subquery',
+                             backref=db.backref('dashboards',lazy=True))
 
 # describes a graph (what data feeds, type,...)
-
 class db_graph(db.Model):
     __tablename__ = "graphs"
     id = db.Column(db.Integer, primary_key=True)
@@ -72,6 +83,6 @@ class db_graph(db.Model):
     data_xy = db.Column(db.String(200))
     # options: json as a string FIXME (axes, hover style,...)
     options = db.Column(db.String(300))
-    
-        
 
+    #dashboards = db.relationship("dashboards",secondary=full_dashboards,lazy='subquery',
+    #                             backref=db.backref('graphs',lazy=True))
