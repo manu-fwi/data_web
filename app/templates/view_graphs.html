@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+<div>
+  <a href="{{ url_for('index') }}">Home</a>
+</div>
+<h4>Click on a graph name to view it</h4>
+<div class="container">
+  {% for graph in get_graphs()%}
+  <div class="row">
+    <div class="col-8">
+      <div class="list-group-item">{{ graph }}</div>
+    </div>
+    <div class="col-4">
+      <a class="list-group-item list-group-item-action" href="{{ url_for('graph_edit',graph_name=graph) }}">
+	<img src="{{ url_for('static',filename='bootstrap-icons-1.8.1/pencil-square.svg') }}" width="32" height="32">
+      </a>
+    </div>
+  </div>
+  {% endfor %}
+  <a class="btn btn-primary" href="{{ url_for('create_graph')}}"><img src="{{ url_for('static',filename='bootstrap-icons-1.8.1/plus-circle.svg') }}"></a>
+</div>
+<script src="https://cdn.plot.ly/plotly-2.8.3.min.js"></script>
+    
+{% endblock %}
