@@ -15,3 +15,8 @@ class GraphEditForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired(), Length(min=5, max=50)])
     graph = SelectField('Select graph type',choices=[(1,"Lines"),(2,"Bars"),(3,"Gauge"),(4,"Pie chart")])
     submit = SubmitField('Save')
+
+class GraphCreateForm(FlaskForm):
+    name = StringField('Name', validators=[DataRequired(), Length(min=5, max=50)])
+    graph = SelectField('Select graph type',choices=[(1,"Lines"),(2,"Bars"),(3,"Gauge"),(4,"Pie chart")])
+    submit = SubmitField('Save')

@@ -4,6 +4,7 @@ from app import app
 from app import models
 from app import forms
 from app import log
+from app import graphs
 
 @app.route('/')
 @app.route('/index')
@@ -44,9 +45,19 @@ def create_dashboard():
 
 @app.route('/create_graph',methods=['GET', 'POST'])
 def create_graph():
-    form=forms.DashboardCreateForm()
-
-    return render_template('create_graph.html', title='Create graph',form=form)
+    form=forms.GraphCreateForm()
+    if form.validate_on_submit():
+        print(request.args)
+        if graphs.exists_graph(request.form.get('name')):
+            log('graph already exists!') #FIXME
+        else:
+            data_str_head = get_data_streams_head()[int(request.values.get('data_str_head'))-1])
+            graphs.add_graph(request.form.get('name'),
+                             int(request.form.get('graph'))-1,
+                             [data_str_head.id])
+    return render_template('create_graph.html',
+                           get_data_streams_head=get_data_streams_head,
+                           title='Create graph',form=form)
 
 @app.route('/view_dashboards')
 def view_dashboards():
@@ -69,7 +80,7 @@ def dashboard_view(dashboard_name):
 def edit_graphs():
     form=forms.GraphEditForm()
     if form.validate_on_submit():
-        #Fixme check if this dashboard name is already taken
+        #Fixme
         log("graph edit:"+form.name.data)
         print(request.form)
         return redirect('/index')

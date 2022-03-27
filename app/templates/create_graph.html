@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% import 'forms.macro' as forms %}
 
 {% block app_content %}
 <div>
@@ -7,12 +8,27 @@
 <div>
   <form action="" method="post">
     {{ form.hidden_tag() }}
-    <p>
-      {{ form.name.label }}<br>
-      {{ form.name(cols=32) }}<br>
-    </p>
-    <p>{{ form.submit() }}</p>
-    </form>
+    <div class="container">
+      <div class="row">
+	<div class="col-3">
+	  {{ form.name.label }} {{ form.name }}
+	</div>
+	<div class="col-3">
+	  {{ form.graph.label }} {{ form.graph }}
+	</div>
+	<div class="col-5">
+	  <select name="data_str_head" class="custom-select" multiple>
+	    {% for data_str in get_data_streams_head() %}
+	    <option value="{{ loop.index }}">{{ data_str.name }}</option>
+	    {% endfor %}
+	  </select>
+	</div>
+	<div class="col-1">
+	  <button type="submit" class="btn btn-primary"><img src="{{ url_for('static',filename='bootstrap-icons-1.8.1/save2.svg') }}"></button>
+	</div>
+      </div>
+    </div>
+  </form>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
 
