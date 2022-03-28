@@ -48,13 +48,11 @@ def create_graph():
     form=forms.GraphCreateForm()
     if form.validate_on_submit():
         print(request.args)
-        if graphs.exists_graph(request.form.get('name')):
-            log('graph already exists!') #FIXME
-        else:
-            data_str_head = get_data_streams_head()[int(request.values.get('data_str_head'))-1])
-            graphs.add_graph(request.form.get('name'),
+        
+        data_str_head = get_data_streams_head()[int(request.values.get('data_str_head'))-1]
+        graphs.add_new_graph(request.form.get('name'),
                              int(request.form.get('graph'))-1,
-                             [data_str_head.id])
+                             "{}")
     return render_template('create_graph.html',
                            get_data_streams_head=get_data_streams_head,
                            title='Create graph',form=form)

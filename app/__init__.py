@@ -26,9 +26,11 @@ log("App config="+str(app.config))
 
 #Start DB engine
 db = SQLAlchemy(app,session_options={"expire_on_commit": False})
+
 print("tables=",db.metadata)
 
 #start socketio
 socketio = SocketIO(app,async_mode="eventlet")
 
 from app import models,routes
+models.db.create_all()
