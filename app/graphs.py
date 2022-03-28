@@ -10,5 +10,14 @@ def exists_graph(name):
         return res==None
     return False
 
-def add_new_graph(name,graph_type,data_streams):
-    pass
+def add_new_graph(name,graph_type,data_streams,
+                  data_xy,options="",rect=""):
+    graph_types=["lines","bars","gauge","pie chart"]
+    graph = models.db_graph()
+    graph.name = name
+    graph.graph_type = graph_types[graph_type]
+    graph.rect=rect
+    graph.data_xy = data_xy
+    graph.options = options
+    models.db.session.add(graph)
+    models.db.session.commit()

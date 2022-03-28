@@ -70,8 +70,6 @@ class db_graph(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     #name: used to find the html object to put it into
     name = db.Column(db.String(50),index=True)
-    #dashboard it belongs to
-    dashboard_id = db.Column(db.Integer,db.ForeignKey('dashboards.id'))
     #Position and size in a string in x,y,w,h format
     #can be Null
     rect = db.Column(db.String(20))
