@@ -2,14 +2,31 @@ from app.config import log
 from app import models
 from flask_sqlalchemy import inspect
 
+graph_types = ("lines","bars","gauge","pie chart")
 
 def exists_graph(name):
     res=models.db_graph.query.filter(models.db_graph.name==name).first()
     return res==None
+
+# help function to build the data_xy string from the db_data_stream_head
+# object and the field name
+# if field name is None, this will either build the data_xy to describe
+# the date_time field if date_t is True, otherwise it will build the data_xy
+# to describe the first non-date field
+
+def build_data_xy(db_data_stream_head,field=None,date_t=True):
+    if field is not None:
+        return db_data_stream_head.name+"['"+field+"']"
+    else:
+        if date_t:
+            # use the date_time field
+            return db_data_stream_head.name+"[date_time]"
+        else:
+            # find first non-date field
+            pass
     
 def add_new_graph(name,graph_type,
                   data_xy,options="",rect=""):
-    graph_types=["lines","bars","gauge","pie chart"]
     graph = models.db_graph()
     graph.name = name
     graph.graph_type = graph_types[graph_type]

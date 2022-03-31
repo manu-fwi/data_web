@@ -74,10 +74,12 @@ class db_graph(db.Model):
     #can be Null
     rect = db.Column(db.String(20))
     #data to describe the graph
-    # graph_type: string, can be: lines FIXME
+    # graph_type: string, cf graph.py
     graph_type = db.Column(db.String(50))
     # data_xy: json as a string {"x":data stream name,"y":[data stream names]}
-    # data stream name is: "name[field]", if field is not present the first field which is not a date is taken
+    # data stream name is: "name['field']"
+    # if field is not present the first field which is not a date is taken
+    # the date_time field of the data_stream is selected by "name[date_time]", no single quotes
     data_xy = db.Column(db.String(200))
     # options: json as a string FIXME (axes, hover style,...)
     options = db.Column(db.String(300))
