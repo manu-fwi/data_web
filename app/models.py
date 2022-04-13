@@ -3,7 +3,7 @@ from app import db
 # table that stores each data stream characteristics:
 # name (string)
 # format: VALUE to indicate just one value, JSON, or CSV for comma separated values
-# the suffix -RECVTIME may be added to the formats JSON and CSV to indicate
+# the suffix -RECVTIME may be added to the JSON and CSV formats to indicate
 # that we must add the time of reception (up to ms); this is implicitly done for the
 # VALUE format
 # fields: comma separated list of fields name
@@ -78,8 +78,8 @@ class db_graph(db.Model):
     graph_type = db.Column(db.String(50))
     # data_xy: json as a string {"x":data stream name,"y":[data stream names]}
     # data stream name is: "name['field']"
-    # if field is not present the first field which is not a date is taken
-    # the date_time field of the data_stream is selected by "name[date_time]", no single quotes
+    # the value field for a VALUE type data_stream is indicated as: "name[VALUE]", no single quotes around VALUE
+    # the date_time field of the data_stream is selected by "name[date_time]", no single quotes around date_time
     data_xy = db.Column(db.String(200))
     # options: json as a string FIXME (axes, hover style,...)
     options = db.Column(db.String(300))

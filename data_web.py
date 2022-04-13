@@ -31,6 +31,9 @@ def connect():
     emit("connected");
 
 #event received to indicate which streams the page will make graphs from and the max number of data points used
+#data_request event json data format:
+# { graph_name:"name",streams:[{data:"stream_name[field] (see data_xy format)",nb_data_init:10]]}
+
 @socketio.event
 def data_request(js_arg):
     log("Data request for data_streams: "+str(js_arg))

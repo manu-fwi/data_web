@@ -52,7 +52,7 @@ def create_graph():
         data_str_head = get_data_streams_head()[int(request.values.get('data_str_head'))-1]
         graphs.add_new_graph(request.form.get('name'),
                              int(request.form.get('graph'))-1,
-                             "{}")
+                             "{'x':"+graphs.build_data_xy(data_str_head)+"}")
     return render_template('create_graph.html',
                            get_data_streams_head=get_data_streams_head,
                            title='Create graph',form=form)

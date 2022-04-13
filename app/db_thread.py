@@ -8,6 +8,7 @@ import json
 #dictionnary of sids <-> pair: (communication queue, list of data_stream_header name that are of interest for the client)
 updates = {}
 #last_update is a naive datetime because every datetime coming from the DB is in UTC
+#FIXME: global last_update does not seem right
 last_update = datetime.fromtimestamp(0)
 log("original update="+str(last_update))
 

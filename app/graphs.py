@@ -14,16 +14,31 @@ def exists_graph(name):
 # the date_time field if date_t is True, otherwise it will build the data_xy
 # to describe the first non-date field
 
-def build_data_xy(db_data_stream_head,field=None,date_t=True):
+def build_data_xy(data_str_head,field=None,date_t=False):
     if field is not None:
-        return db_data_stream_head.name+"['"+field+"']"
+        return data_str_head.name+"['"+field+"']"
     else:
         if date_t:
             # use the date_time field
-            return db_data_stream_head.name+"[date_time]"
+            return data_str_head.name+"[date_time]"
         else:
             # find first non-date field
-            pass
+            if data_str_head.stream_format == "VALUE":
+                # just one value field
+                return data_str_head.name+"[VALUE]"
+            elif "CSV" in data_str_head.stream_format:
+                # CSV formatted data stream
+                # get rid of the date format
+                l1=data_str_head.fields.split('"')
+                if len(l1[0])>0:
+                    res = l1[0][:l1[0].find(',')]
+                else:
+                    pos = l1[2][1:].find(',')
+                    if pos==-1:
+                        pos = len(l1[2])
+                    res=l1[2][:pos]
+                print("name['"+res+"']")
+                return "name['"+res+"']"
     
 def add_new_graph(name,graph_type,
                   data_xy,options="",rect=""):
