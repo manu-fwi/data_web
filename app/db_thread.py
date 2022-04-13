@@ -5,7 +5,10 @@ from collections import deque
 from sqlalchemy import and_
 import json
 
-#dictionnary of sids <-> pair: (communication queue, list of data_stream_header name that are of interest for the client)
+#dictionnary of sids <-> pair: (communication queue, dictionnary (see below)
+# dictionnary: - graphs_desc:list of graphs description ({graph_name:"name",streams:[{data:"data_xy",nb_data_init:10},...]})
+#              - updates_ids: list of ids of data_streams that are to be updated
+
 updates = {}
 #last_update is a naive datetime because every datetime coming from the DB is in UTC
 #FIXME: global last_update does not seem right
@@ -78,10 +81,12 @@ def db_thread(socketio):
 def process_init(streams_lst,sid):
     global last_update
     log("Processing init message "+str(streams_lst))
-    for str_name,stream_id,limit in streams_lst:
+    for stream in streams_lst:
         #get last values (number is given by limit)
         #in case the request wants no data, we need to set the limit to 1
         #so we can still query to get the header_id
+        limit = stream["nb_data_init"]
+        stream_id = stream["id"]
         query_limit=max(limit,1)
         values = models.db_data_streams.query.filter(models.db_data_streams.header_id==stream_id)\
                                              .order_by(models.db_data_streams.date_time.desc())\
