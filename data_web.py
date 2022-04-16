@@ -62,10 +62,10 @@ def data_request(js_arg):
     with threads_lock:
         # add streams_ids that are not yet present in the list of interesting updates
         for l in lst:
-            if l.id not in db_thread.updates[request.sid][1][updates_ids]:
-                db_thread.updates[request.sid][1][updates_ids].append(l.id)
-        #add the graph description
-            db_thread.updates[request.sid][1][graphs_desc].append(js_arg)
+            if l.id not in db_thread.updates[request.sid][1]["updates_ids"]:
+                db_thread.updates[request.sid][1]["updates_ids"].append(l.id)
+            #add the graph description
+            db_thread.updates[request.sid][1]["graphs_desc"].append(js_arg)
 
     log("data request lst="+str([l.id for l in lst]))
 
